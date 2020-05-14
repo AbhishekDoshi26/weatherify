@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weatherify/services/location.dart';
-import 'package:weatherify/services/networking.dart';
-
-const apiKey = '4f84e44072e242ae76f0bd24b93067a3';
+import 'package:weatherify/screens/location_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:weatherify/services/weather.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -10,9 +9,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  double latitude;
-  double longitude;
-
   @override
   void initState() {
     super.initState();
@@ -20,21 +16,32 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    latitude = location.latitude;
-    longitude = location.longitude;
-    NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
-    var weatherData = await networkHelper.getData();
+    var weatherData = await WeatherModel().getLocationWeather();
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(weatherData);
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/waterfall.gif'),
+            fit: BoxFit.fill,
+            colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+          ),
+        ),
+        child: Center(
+          child: SpinKitFadingFour(
+            color: Colors.white,
+            size: 100.0,
+            duration: Duration(seconds: 1),
+          ),
+        ),
+      ),
+    );
   }
 }
-
-//var temperature = decodedData['main']['temp'];
-//var condition = decodedData['weather'][0]['id'];
-//var cityName = decodedData['name'];
