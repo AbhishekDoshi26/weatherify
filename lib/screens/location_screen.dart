@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contactus/contactus.dart';
 import 'package:flutter/material.dart';
 import 'package:weatherify/screens/city_screen.dart';
@@ -65,23 +67,19 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton(
+                  IconButton(
                     highlightColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     onPressed: () async {
                       var weatherData = await weatherModel.getLocationWeather();
                       updateUI(weatherData);
                     },
-                    child: Icon(
+                    icon: Icon(
                       Icons.near_me,
                       size: 30.0,
                     ),
                   ),
-                  FlatButton(
+                  IconButton(
                     highlightColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     onPressed: () async {
                       var typedName = await Navigator.push(
                         context,
@@ -97,11 +95,21 @@ class _LocationScreenState extends State<LocationScreen> {
                         updateUI(weatherData);
                       }
                     },
-                    child: Icon(
-                      Icons.location_city,
+                    icon: Icon(
+                      Icons.search,
                       size: 30.0,
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      exit(1);
+                    },
+                    icon: Icon(
+                      Icons.power_settings_new,
+                      color: Colors.white,
+                      size: 30.0,
+                    ),
+                  )
                 ],
               ),
               Padding(
@@ -109,7 +117,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '$temperature°',
+                      '$temperature°C',
                       style: kTempTextStyle,
                     ),
                     Text(
